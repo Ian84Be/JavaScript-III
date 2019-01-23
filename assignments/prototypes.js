@@ -19,7 +19,7 @@ function GameObject(att) {
     this.dimensions = att.dimensions;
 }
 GameObject.prototype.destroy = function() {
-  return `${this.name} was removed from the game.`;
+  console.log(`${this.name} was removed from the game.`);
 }
 
 /*
@@ -36,7 +36,7 @@ function CharacterStats(att) {
 }
 CharacterStats.prototype = Object.create(GameObject.prototype);
 CharacterStats.prototype.takeDamage = function() {
-  return `${this.name} took damage.`
+  console.log(`${this.name} took damage.`);
 }
 
 /*
@@ -56,7 +56,7 @@ function Humanoid(att) {
 }
 Humanoid.prototype = Object.create(CharacterStats.prototype);
 Humanoid.prototype.greet = function() {
-  return `${this.name} offers a greeting in ${this.language}`;
+  console.log(`${this.name} offers a greeting in ${this.language}`);
 } 
 
 /*
@@ -118,19 +118,86 @@ Humanoid.prototype.greet = function() {
     language: 'Elvish',
   });
 
-  console.log(mage.createdAt); // Today's date
-  console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
-  console.log(swordsman.healthPoints); // 15
-  console.log(mage.name); // Bruce
-  console.log(swordsman.team); // The Round Table
-  console.log(mage.weapons); // Staff of Shamalama
-  console.log(archer.language); // Elvish
-  console.log(archer.greet()); // Lilith offers a greeting in Elvish.
-  console.log(mage.takeDamage()); // Bruce took damage.
-  console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
+  // console.log(mage.createdAt); // Today's date
+  // console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
+  // console.log(swordsman.healthPoints); // 15
+  // console.log(mage.name); // Bruce
+  // console.log(swordsman.team); // The Round Table
+  // console.log(mage.weapons); // Staff of Shamalama
+  // console.log(archer.language); // Elvish
+  // console.log(archer.greet()); // Lilith offers a greeting in Elvish.
+  // console.log(mage.takeDamage()); // Bruce took damage.
+  // console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 
 
   // Stretch task: 
-  // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
+  // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
-  // * Create two new objects, one a villain and one a hero and fight it out with methods!
+  // * Create two new objects, one a villain and one a hero and fight it out with methods!  
+function Hero(att) {
+  Humanoid.call(this, att);
+}
+Hero.prototype = Object.create(Humanoid.prototype);
+Hero.prototype.attack = function(target) {
+  target.healthPoints -= 1;
+  console.log(`${this.name} attacks ${target.name}! Roll for 1HP damage. ${target.name} has ${target.healthPoints}HP now.`);
+}
+const link = new Hero({
+  createdAt: new Date(),
+  dimensions: {
+    length: 1,
+    width: 2,
+    height: 4,
+  },
+  healthPoints: 10,
+  name: 'Link',
+  team: 'Hyrule',
+  weapons: [
+    'Master Sword',
+    'Boomerang',
+  ],
+  language: 'silence',
+});
+
+function Villian(att) {
+  Hero.call(this, att);
+}
+Villian.prototype = Object.create(Hero.prototype);
+
+const gannon = new Villian({
+  createdAt: new Date(),
+  dimensions: {
+    length: 2,
+    width: 4,
+    height: 9,
+  },
+  healthPoints: 50,
+  name: 'Gannondorf',
+  team: 'Gerudo',
+  weapons: [
+    'Triforce of Power',
+    'Dark Magic',
+  ],
+  language: 'English',
+});
+
+Villian.prototype.taunt = function(target) {
+  console.log(`${this.name} sneers and insults ${target.name}.`);
+};
+
+Villian.prototype.attack = function(target) {
+  target.healthPoints *= .5;
+  console.log(`${this.name} uses Dark Magic to attack! ${target.name} has ${target.healthPoints}HP remaining.`);
+};
+
+gannon.greet();
+link.greet();
+link.attack(gannon);
+link.attack(gannon);
+gannon.taunt(link);
+link.attack(gannon);
+link.attack(gannon);
+gannon.attack(link);
+
+
+
