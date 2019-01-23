@@ -16,7 +16,7 @@ function GameObject(att) {
     this.dimensions = att.dimensions;
 }
 GameObject.prototype.destroy = function() {
-  console.log(`${this.name} was destroyed.`);
+  console.log(`*** ${this.name} was destroyed. ***`); 
 }
 
 /*
@@ -34,7 +34,7 @@ CharacterStats.prototype.takeDamage = function() {
 }
 // HP METER
 CharacterStats.prototype.hpMeter = function() {
-  console.log(`${this.name} has ${this.healthPoints}/${this.totalHP}HP`);
+  console.log(`/// ${this.name} has ${this.healthPoints}/${this.totalHP}HP ///`);
 };
 
 /*
@@ -124,14 +124,15 @@ Hero.prototype = Object.create(Humanoid.prototype);
 
 Hero.prototype.attack = function(target) {
   console.log(`${this.name} attacks ${target.name}`);
-  let roll = Math.floor(Math.random()*10);
-  if (roll > 5) {
-    console.log(`CRITICAL HIT!`);
-    roll*3;
+  let roll = Math.floor(Math.random()*12);
+  console.log(`--- --- ${roll}`);
+  if (roll > 9) {
+    console.log(`!!! CRITICAL HIT !!!`);
+    roll*=2;
   }
   target.healthPoints -= roll;
   console.log(`${this.name} deals ${roll}HP damage!`);
-  return (target.healthPoints == 0) ? target.destroy() : target.hpMeter();
+  return (target.healthPoints > 0) ? target.hpMeter() : target.destroy();
 }
 
 const link = new Hero({
@@ -141,7 +142,7 @@ const link = new Hero({
     width: 2,
     height: 4,
   },
-  healthPoints: 10,
+  healthPoints: 30,
   name: 'Link',
   team: 'Hyrule',
   weapons: [
@@ -184,18 +185,14 @@ Villian.prototype.magic = function(target) {
 
 gannon.greet();
 link.greet();
-link.attack(gannon);
-link.attack(gannon);
-gannon.taunt(link);
-link.attack(gannon);
-link.attack(gannon);
-gannon.attack(link);
-link.attack(gannon);
-link.attack(gannon);
-gannon.attack(link);
-link.attack(gannon);
-link.attack(gannon);
-link.attack(gannon);
-link.attack(gannon);
+
+while (gannon.healthPoints > 0 && link.healthPoints > 0) {
+  let roll = Math.floor(Math.random()*12);
+  console.log(`... ... ... ${roll}`);
+  if (roll > 5) link.attack(gannon);
+  else if (roll < 5 && roll > 2) gannon.attack(link);
+  else gannon.taunt(link);
+}
+
 
 
