@@ -116,25 +116,32 @@ Humanoid.prototype.greet = function() {
   // console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 
 
-  // Stretch task: 
+  // Stretch
+  // HERO CONSTRUCTOR
 function Hero(att) {
   Humanoid.call(this, att);
 }
 Hero.prototype = Object.create(Humanoid.prototype);
 
+// HERO ATTACK START
 Hero.prototype.attack = function(target) {
   console.log(`${this.name} attacks ${target.name}`);
-  let roll = Math.floor(Math.random()*12);
-  console.log(`--- --- ${roll}`);
+  // ROLL A 12 SIDED DIE
+  let roll = Math.floor(Math.random()*12+1);
+  // console.log(`--- attack --- ${roll}`);
+  
   if (roll > 9) {
     console.log(`!!! CRITICAL HIT !!!`);
     roll*=2;
   }
+
+  // FINISH ATTACK
   target.healthPoints -= roll;
-  console.log(`${this.name} deals ${roll}HP damage!`);
+  console.log(`${this.name} deals ${roll} damage!`);
   return (target.healthPoints > 0) ? target.hpMeter() : target.destroy();
 }
 
+// THE LEGEND OF HYRULE
 const link = new Hero({
   createdAt: new Date(),
   dimensions: {
@@ -152,11 +159,13 @@ const link = new Hero({
   language: 'silence',
 });
 
+// VILLIAN CONSTRUCTOR
 function Villian(att) {
   Hero.call(this, att);
 }
 Villian.prototype = Object.create(Hero.prototype);
 
+// EVIL WIZARD
 const gannon = new Villian({
   createdAt: new Date(),
   dimensions: {
@@ -173,26 +182,31 @@ const gannon = new Villian({
   ],
   language: 'English',
 });
-
 Villian.prototype.taunt = function(target) {
   console.log(`${this.name} sneers and insults ${target.name}.`);
 };
-
-Villian.prototype.magic = function(target) {
-  target.healthPoints *= .5;
-  console.log(`${this.name} uses Dark Magic to attack! ${target.name} has ${target.healthPoints}HP remaining.`);
+// EVIL MAGIC ATTACK
+Villian.prototype.magicAttack = function(target) {
+  let dmg = Math.floor(target.healthPoints * .5);
+  target.healthPoints -= dmg;
+  console.log(`${this.name} uses Dark Magic to attack!`);
+  console.log(`${target.name} loses ${dmg}HP`);
+  return (target.healthPoints > 0) ? target.hpMeter() : target.destroy();
 };
+
 
 gannon.greet();
 link.greet();
+// gannon.magicAttack(link);
+// gannon.magicAttack(link);
+
+// BATTLE TO THE DEATH
 
 while (gannon.healthPoints > 0 && link.healthPoints > 0) {
-  let roll = Math.floor(Math.random()*12);
-  console.log(`... ... ... ${roll}`);
-  if (roll > 5) link.attack(gannon);
+  let roll = Math.floor(Math.random()*12+1);
+  console.log(`... time ... ${roll}`);
+  if (roll == 12) gannon.magicAttack(link);
+  else if (roll > 5) link.attack(gannon);
   else if (roll < 5 && roll > 2) gannon.attack(link);
   else gannon.taunt(link);
 }
-
-
-
