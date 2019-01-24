@@ -1,110 +1,122 @@
-/*
-  Object oriented design is commonly used in video games.  For this part of the assignment you will be implementing several constructor functions with their correct inheritance hierarchy.
+class GameObject {
+  constructor(att) {
+    this.createdAt = att.createdAt;
+    this.dimensions = att.dimensions;
+  }
+  destroy() {
+    console.log(`*** ${this.name} was destroyed. ***`); 
+  }
+}
 
-  In this file you will be creating three constructor functions: GameObject, CharacterStats, Humanoid.  
+class CharacterStats extends GameObject {
+  constructor(att) {
+    super(att);
+    this.totalHP = att.healthPoints;
+    this.healthPoints = att.healthPoints;
+    this.name = att.name;
+  }
+  hpMeter() {
+  console.log(`/// ${this.name} ${this.healthPoints}/${this.totalHP}HP ///`);
+  }
+}
 
-  At the bottom of this file are 3 objects that all end up inheriting from Humanoid.  Use the objects at the bottom of the page to test your constructor functions.
-  
-  Each constructor function has unique properties and methods that are defined in their block comments below:
-*/
-  
-/*
-  === GameObject ===
-  * createdAt
-  * dimensions (These represent the character's size in the video game)
-  * destroy() // prototype method -> returns the string: 'Object was removed from the game.'
-*/
+class Humanoid extends CharacterStats {
+  constructor(att) {
+    super(att);
+    this.team = att.team;
+    this.weapons = att.weapons;
+    this.language = att.language;
+  }
+  greet() {
+    console.log(`${this.name} offers a greeting in ${this.language}`);
+  } 
+}
 
-/*
-  === CharacterStats ===
-  * healthPoints
-  * name
-  * takeDamage() // prototype method -> returns the string '<object name> took damage.'
-  * should inherit destroy() from GameObject's prototype
-*/
+  // HERO CONSTRUCTOR
+class Hero extends Humanoid {
+  constructor(att) {
+    super(att);
+  }
+  attack(target) {
+    console.log(`${this.name} attacks ${target.name}`);
+    let roll = Math.floor(Math.random()*12+1);
+    // console.log(`--- attack --- ${roll}`);
+    if (roll > 9) {
+      console.log(`!!! CRITICAL HIT !!!`);
+      roll*=2;
+    }
+    if (roll == 1) {
+      console.log(`${target.name} dodges the attack!`);
+      roll = 0;
+    }
+    target.healthPoints -= roll;
+    console.log(`${this.name} deals ${roll} damage!`);
+    return (target.healthPoints > 0) ? target.hpMeter() : target.destroy();
+  }
+}
 
-/*
-  === Humanoid (Having an appearance or character resembling that of a human.) ===
-  * team
-  * weapons
-  * language
-  * greet() // prototype method -> returns the string '<object name> offers a greeting in <object language>.'
-  * should inherit destroy() from GameObject through CharacterStats
-  * should inherit takeDamage() from CharacterStats
-*/
- 
-/*
-  * Inheritance chain: GameObject -> CharacterStats -> Humanoid
-  * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
-  * Instances of CharacterStats should have all of the same properties as GameObject.
-*/
+// THE LEGEND OF HYRULE
+const link = new Hero({
+  createdAt: new Date(),
+  dimensions: {
+    length: 1,
+    width: 2,
+    height: 4,
+  },
+  healthPoints: 30,
+  name: 'Link',
+  team: 'Hyrule',
+  weapons: [
+    'Master Sword',
+    'Boomerang',
+  ],
+  language: 'silence',
+});
 
-// Test you work by un-commenting these 3 objects and the list of console logs below:
+// VILLIAN CONSTRUCTOR
+class Villian extends Hero {
+  constructor(att) {
+    super(att);
+  }
+  taunt(target) {
+    console.log(`${this.name} sneers and insults ${target.name}`);
+  }
+  magicAttack(target) {
+    let dmg = Math.floor(target.healthPoints * .5);
+    target.healthPoints -= dmg;
+    console.log(`${this.name} uses Dark Magic to attack!`);
+    console.log(`${target.name} loses ${dmg}HP`);
+    return (target.healthPoints > 0) ? target.hpMeter() : target.destroy();
+  }
+}
 
-/*
-  const mage = new Humanoid({
-    createdAt: new Date(),
-    dimensions: {
-      length: 2,
-      width: 1,
-      height: 1,
-    },
-    healthPoints: 5,
-    name: 'Bruce',
-    team: 'Mage Guild',
-    weapons: [
-      'Staff of Shamalama',
-    ],
-    language: 'Common Tongue',
-  });
+// EVIL WIZARD
+const gannon = new Villian({
+  createdAt: new Date(),
+  dimensions: {
+    length: 2,
+    width: 4,
+    height: 9,
+  },
+  healthPoints: 50,
+  name: 'Gannondorf',
+  team: 'Gerudo',
+  weapons: [
+    'Triforce of Power',
+    'Dark Magic',
+  ],
+  language: 'English',
+});
 
-  const swordsman = new Humanoid({
-    createdAt: new Date(),
-    dimensions: {
-      length: 2,
-      width: 2,
-      height: 2,
-    },
-    healthPoints: 15,
-    name: 'Sir Mustachio',
-    team: 'The Round Table',
-    weapons: [
-      'Giant Sword',
-      'Shield',
-    ],
-    language: 'Common Tongue',
-  });
+gannon.greet();
+link.greet();
 
-  const archer = new Humanoid({
-    createdAt: new Date(),
-    dimensions: {
-      length: 1,
-      width: 2,
-      height: 4,
-    },
-    healthPoints: 10,
-    name: 'Lilith',
-    team: 'Forest Kingdom',
-    weapons: [
-      'Bow',
-      'Dagger',
-    ],
-    language: 'Elvish',
-  });
-
-  console.log(mage.createdAt); // Today's date
-  console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
-  console.log(swordsman.healthPoints); // 15
-  console.log(mage.name); // Bruce
-  console.log(swordsman.team); // The Round Table
-  console.log(mage.weapons); // Staff of Shamalama
-  console.log(archer.language); // Elvish
-  console.log(archer.greet()); // Lilith offers a greeting in Elvish.
-  console.log(mage.takeDamage()); // Bruce took damage.
-  console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
-*/
-
-  // Stretch task: 
-  // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
-  // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
-  // * Create two new objects, one a villain and one a hero and fight it out with methods!
+// BATTLE TO THE DEATH
+while (gannon.healthPoints > 0 && link.healthPoints > 0) {
+  let roll = Math.floor(Math.random()*12+1);
+  // console.log(`... time ... ${roll}`);
+  if (roll == 12) gannon.magicAttack(link);
+  else if (roll > 5 && roll < 12) link.attack(gannon);
+  else if (roll < 5 && roll > 1) gannon.attack(link);
+  else gannon.taunt(link);
+}
