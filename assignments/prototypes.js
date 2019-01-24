@@ -135,6 +135,11 @@ Hero.prototype.attack = function(target) {
     roll*=2;
   }
 
+  if (roll == 1) {
+    console.log(`${target.name} dodges the attack!`);
+    roll = 0;
+  }
+
   // FINISH ATTACK
   target.healthPoints -= roll;
   console.log(`${this.name} deals ${roll} damage!`);
@@ -183,7 +188,7 @@ const gannon = new Villian({
   language: 'English',
 });
 Villian.prototype.taunt = function(target) {
-  console.log(`${this.name} sneers and insults ${target.name}.`);
+  console.log(`${this.name} sneers and insults ${target.name}`);
 };
 // EVIL MAGIC ATTACK
 Villian.prototype.magicAttack = function(target) {
@@ -201,12 +206,11 @@ link.greet();
 // gannon.magicAttack(link);
 
 // BATTLE TO THE DEATH
-
 while (gannon.healthPoints > 0 && link.healthPoints > 0) {
   let roll = Math.floor(Math.random()*12+1);
   console.log(`... time ... ${roll}`);
   if (roll == 12) gannon.magicAttack(link);
-  else if (roll > 5) link.attack(gannon);
-  else if (roll < 5 && roll > 2) gannon.attack(link);
+  else if (roll > 5 && roll < 12) link.attack(gannon);
+  else if (roll < 5 && roll > 1) gannon.attack(link);
   else gannon.taunt(link);
 }
