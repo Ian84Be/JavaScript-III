@@ -1,0 +1,71 @@
+@import 'reset.less';
+
+.center() {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+h1 {
+    font-size:3rem;
+}
+
+.container {
+    font-family: 'Volkhov', serif;
+    .center();
+    border:1px solid red;
+    background:black;
+    color:white;
+    padding:20px 0;
+    margin: 0 auto;
+    width:90%;
+
+    .main-image {
+        .center();
+        border:3px dotted white;
+    }
+
+    .talk-box {
+        .center();
+        // background:pink;
+        // color:black;
+        // border:1px solid blue;
+        padding:20px;
+        width:90%;
+    }
+
+    .life-meter {
+        .center();
+        // border:3px dotted white;
+        color:red;
+        font-size:2rem;
+        // padding:10px;
+
+        p {
+            align-self:left;
+        }
+    }
+
+    .d12 {
+        // border:3px dotted white;
+        margin:0;
+        padding:0;
+        img {
+            width:100px;
+            height:100px;
+            filter: invert(100%);
+            &:hover {
+                cursor:pointer;
+            }
+        }
+    }
+}
+
+#linkvsgannon img {
+    width:600px;
+    height:300px;
+}
+
+
+
