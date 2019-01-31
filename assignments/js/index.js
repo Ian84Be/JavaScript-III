@@ -46,19 +46,16 @@ class Hero extends Humanoid {
     // console.log(`--- attack --- ${roll}`);
     if (roll > 9) {
       console.log(`!!! CRITICAL HIT !!!`);
-      // talkBox.textContent = `!!! CRITICAL HIT !!!`
       speakOut(`!!! CRITICAL HIT !!!`);
       roll*=2;
     }
     if (roll == 1) {
       console.log(`${target.name} dodges the attack!`);
-      // talkBox.textContent = `${target.name} dodges the attack!`
       speakOut(`${target.name} dodges the attack!`);
       roll = 0;
     }
     target.healthPoints -= roll;
     console.log(`${this.name} deals ${roll} damage!`);
-    // talkBox.textContent = `${this.name} deals ${roll} damage!`;
     speakOut(`${this.name} deals ${roll} damage!`);
     return (target.healthPoints > 0) ? target.hpMeter() : target.destroy();
   }

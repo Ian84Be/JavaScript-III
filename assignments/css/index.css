@@ -135,9 +135,7 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
-  background: black;
-  color: white;
+  color: black;
   padding: 20px 0;
   margin: 0 auto;
   width: 90%;
@@ -147,7 +145,6 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 3px dotted white;
 }
 .container .talk-box {
   display: flex;
@@ -175,7 +172,6 @@ h1 {
 .container .d12 img {
   width: 100px;
   height: 100px;
-  filter: invert(100%);
 }
 .container .d12 img:hover {
   cursor: pointer;
